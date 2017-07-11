@@ -17,9 +17,6 @@ public class Income {
     @OneToOne
     @JoinColumn(name = "operation_id")
     private Operation operation;
-    @OneToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
 
     public long getId() {
         return id;
@@ -43,13 +40,5 @@ public class Income {
 
     public void setOperation(Operation operation) {
         this.operation = operation;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 }

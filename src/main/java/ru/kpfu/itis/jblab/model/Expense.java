@@ -14,9 +14,7 @@ public class Expense {
     @OneToOne
     @JoinColumn(name = "type_id")
     private ExpenseType expenseType;
-    @OneToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+
     @OneToOne
     @JoinColumn(name = "operation_id")
     private Operation operation;
@@ -35,14 +33,6 @@ public class Expense {
 
     public void setExpenseType(ExpenseType expenseType) {
         this.expenseType = expenseType;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     public Operation getOperation() {

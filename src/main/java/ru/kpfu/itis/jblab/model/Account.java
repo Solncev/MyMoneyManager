@@ -16,6 +16,15 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+    private String picture;
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
     public long getId() {
         return id;

@@ -14,9 +14,6 @@ public class Debt {
     @OneToOne
     @JoinColumn(name = "operation_id")
     private Operation operation;
-    @OneToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
     private String name;
     private Boolean isOwnerDebtor;
 
@@ -50,13 +47,5 @@ public class Debt {
 
     public void setOperation(Operation operation) {
         this.operation = operation;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
     }
 }

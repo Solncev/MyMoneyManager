@@ -15,6 +15,15 @@ public class ExpenseType {
     @JoinColumn(name = "owner_id")
     private User owner;
     private String name;
+    private String picture;
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
     public User getOwner() {
         return owner;

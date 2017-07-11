@@ -12,14 +12,19 @@ public class Transfer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToOne
-    @JoinColumn(name = "sender_id")
-    private Account sender;
-    @OneToOne
-    @JoinColumn(name = "recipient_id")
-    private Account recipient;
+    @JoinColumn(name = "second_account_id")
+    private Account secondAccount;
     @OneToOne
     @JoinColumn(name = "operation_id")
     private Operation operation;
+
+    public Account getSecondAccount() {
+        return secondAccount;
+    }
+
+    public void setSecondAccount(Account secondAccount) {
+        this.secondAccount = secondAccount;
+    }
 
     public Operation getOperation() {
         return operation;
@@ -35,21 +40,5 @@ public class Transfer {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Account getSender() {
-        return sender;
-    }
-
-    public void setSender(Account sender) {
-        this.sender = sender;
-    }
-
-    public Account getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(Account recipient) {
-        this.recipient = recipient;
     }
 }

@@ -19,6 +19,36 @@ public class Operation {
     private Date date;
     private double amount;
     private String comment;
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+    @OneToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public double getAmount() {
         return amount;
