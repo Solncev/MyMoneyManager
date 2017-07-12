@@ -1,5 +1,8 @@
 package ru.kpfu.itis.jblab.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 /**
@@ -11,10 +14,11 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @OneToOne
     @JoinColumn(name = "type_id")
     private ExpenseType expenseType;
-
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @OneToOne
     @JoinColumn(name = "operation_id")
     private Operation operation;

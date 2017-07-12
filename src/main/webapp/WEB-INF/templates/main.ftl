@@ -31,6 +31,7 @@
                 <h4 class="list-group-item-heading">${account.name}</h4>
                 <p class="list-group-item-text">баланс: ${account.balance}</p>
                 <form action="/account/${account.id}/delete">
+                    <input type="checkbox" name="account_history" value="true">cохранить историю<br>
                     <input type="submit" id="submit-btn" value="Удалить">
                 </form>
             </a>
@@ -64,6 +65,7 @@
             <a href="#" class="list-group-item">
                 <h4 class="list-group-item-heading">${expenseType.name}</h4>
                 <form action="/expense_type/${expenseType.id}/delete">
+                    <input type="checkbox" name="expense_type_history" value="true">cохранить историю<br>
                     <input type="submit" id="submit-btn" value="Удалить">
                 </form>
             </a>
@@ -106,31 +108,104 @@
     <h2>Добавить расход</h2>
     <form action="/expense/create" method="post" class="form-inline">
         <div class="form-group">
-        <#if expenseTypes1?has_content>
             <label for="sel1">Категория расходов:</label>
             <select class="form-control" id="sel1" name="sel1">
+                <option value="-1">выбрать</option>
+            <#if expenseTypes1?has_content>
                 <#list expenseTypes1 as expenseType1>
                     <option value="${expenseType1.id}">${expenseType1.name}</option>
                 </#list>
+            </#if>
             </select>
-        </#if>
-        <#if accounts1?has_content>
+        </div>
+        <div class="form-group">
+
             <label for="sel2">Выберите кошелёк:</label>
             <select class="form-control" id="sel2" name="sel2">
+                <option value="-1">выбрать</option>
+            <#if accounts1?has_content>
                 <#list accounts1 as account1>
                     <option value="${account1.id}">${account1.name}</option>
                 </#list>
+            </#if>
             </select>
-        </#if>
-            <br>
         </div>
         <div class="form-group">
             <label for="operation_amount">Сумма:</label>
-            <input type="number" class="form-control" name="operation_amount" id="operation_amount">
+            <input type="number" class="form-control" name="operation_amount" id="operation_amount" value="0">
         </div>
         <div class="form-group">
             <label for="operation_comment">Комментарий:</label>
             <input type="text" class="form-control" id="operation_comment" name="operation_comment">
+        </div>
+        <button type="submit" class="btn btn-default">Добавить</button>
+    </form>
+</div>
+
+<#if incomeSourceList?has_content>
+<div class="container">
+    <h2>Источники дохода</h2>
+    <div class="list-group">
+        <#list incomeSourceList as incomeSource>
+            <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">${incomeSource.name}</h4>
+                <p class="list-group-item-text">+${incomeSource.actualIncome} P</p>
+                <form action="/income_source/${incomeSource.id}/delete">
+                    <input type="submit" id="submit-btn" value="Удалить">
+                </form>
+            </a>
+        </#list>
+    </div>
+</div>
+</#if>
+
+<div class="container">
+    <h2>Создать источник дохода</h2>
+    <form action="/income_source/create" method="post" class="form-inline">
+        <div class="form-group">
+            <label for="income_source_name">Название источника дохода:</label>
+            <input type="text" class="form-control" id="income_source_name" placeholder="Введите название"
+                   name="income_source_name">
+        </div>
+        <button type="submit" class="btn btn-default">Добавить</button>
+    </form>
+</div>
+
+
+<div class="container">
+    <h2>Добавить доход</h2>
+    <form action="/income/create" method="post" class="form-inline">
+        <div class="form-group">
+            <label for="sel3">Выберите источник:</label>
+            <select class="form-control" id="sel3" name="sel3">
+                <option value="-1">выбрать</option>
+            <#if incomeSourceList2?has_content>
+                <#list incomeSourceList2 as incomeSource2>
+                    <option value="${incomeSource2.id}">${incomeSource2.name}</option>
+                </#list>
+            </#if>
+            </select>
+            <br>
+        </div>
+        <div class="form-group">
+            <label for="sel4">Выберите кошелёк:</label>
+            <select class="form-control" id="sel4" name="sel4">
+                <option value="-1">выбрать</option>
+            <#if accounts2?has_content>
+                <#list accounts2 as account2>
+                    <option value="${account2.id}">${account2.name}</option>
+                </#list>
+            </#if>
+            </select>
+            <br>
+        </div>
+        <div class="form-group">
+            <label for="operation_amount">Сумма:</label>
+            <input type="number" class="form-control" name="income_amount" id="income_amount" value="0">
+        </div>
+        <div class="form-group">
+            <label for="operation_comment">Комментарий:</label>
+            <input type="text" class="form-control" id="income_comment" name="income_comment">
         </div>
         <button type="submit" class="btn btn-default">Добавить</button>
     </form>

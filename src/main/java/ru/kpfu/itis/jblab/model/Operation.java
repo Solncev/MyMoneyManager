@@ -1,5 +1,8 @@
 package ru.kpfu.itis.jblab.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -19,6 +22,7 @@ public class Operation {
     private Date date;
     private double amount;
     private String comment;
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;

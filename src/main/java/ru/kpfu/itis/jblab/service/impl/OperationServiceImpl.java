@@ -44,4 +44,14 @@ public class OperationServiceImpl implements OperationService {
     public List<Operation> getAllByOwnerId(Long ownerId) {
         return operationRepository.findAllByOwnerId(ownerId);
     }
+
+    @Override
+    public List<Operation> getAllByAccountId(Long accountId) {
+        return operationRepository.findAllByAccountId(accountId);
+    }
+
+    @Override
+    public Operation update(Operation operation) {
+        return operationRepository.save(operation);
+    }
 }

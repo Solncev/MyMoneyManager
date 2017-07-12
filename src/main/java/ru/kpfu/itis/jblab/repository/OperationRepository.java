@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface OperationRepository extends JpaRepository<Operation, Long> {
     List<Operation> findAllByOwnerId(Long ownerId);
+
+    List<Operation> findAllByAccountId(Long accountId);
 }

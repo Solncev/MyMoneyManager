@@ -10,19 +10,27 @@ import javax.persistence.*;
 public class IncomeSource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
-    private double expectedIncome;
     private double actualIncome;
+    private String picture;
 
-    public long getId() {
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -40,14 +48,6 @@ public class IncomeSource {
 
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    public double getExpectedIncome() {
-        return expectedIncome;
-    }
-
-    public void setExpectedIncome(double expectedIncome) {
-        this.expectedIncome = expectedIncome;
     }
 
     public double getActualIncome() {

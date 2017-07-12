@@ -10,6 +10,7 @@ import ru.kpfu.itis.jblab.model.*;
 import ru.kpfu.itis.jblab.service.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,8 +49,29 @@ public class ExpenseController {
     }
 
     @RequestMapping(value = "/expense_type/{id}/delete")
-    public String deleteAccount(@PathVariable(name = "id") String id) {
+    public String deleteAccount(@PathVariable(name = "id") String id,
+                                @RequestParam Map<String, String> allRequestParams) {
+        String expenseHistory = allRequestParams.get("expense_type_history");
+        Boolean flag = (expenseHistory != null);
         Long expenseTypeId = Long.valueOf(id);
+        List<Expense> expenseList = expenseService.getAllByExpenseTypeId(expenseTypeId);
+        if (flag) {
+            ExpenseType deletedExpenseType = expenseTypeService.getOne(expenseTypeId);
+            ExpenseType expenseType = new ExpenseType();
+            expenseType.setName(deletedExpenseType.getName());
+            expenseType.setPicture(deletedExpenseType.getPicture());
+            expenseTypeService.add(expenseType);
+            for (Expense expense : expenseList) {
+                expense.setExpenseType(expenseType);
+                expenseService.update(expense);
+            }
+        } else {
+            for (Expense expense : expenseList) {
+                Operation operation = expense.getOperation();
+                expenseService.delete(expense);
+                operationService.delete(operation);
+            }
+        }
         expenseTypeService.delete(expenseTypeId);
         return "redirect:/";
     }
@@ -61,10 +83,10 @@ public class ExpenseController {
         String comment = allRequestParams.get("operation_comment");
         Long expenseTypeId = Long.valueOf(allRequestParams.get("sel1"));
         Double amount = Double.parseDouble(allRequestParams.get("operation_amount"));
-        Account account = accountService.getOne(accountId);
-        Double accountBalance = account.getBalance();
-        if (accountBalance >= amount) {
-            account.setBalance(account.getBalance() - amount);
+        if (accountId != -1 && expenseTypeId != -1) {
+            Account account = accountService.getOne(accountId);
+            Double accountBalance = account.getBalance();
+            account.setBalance(accountBalance - amount);
             account = accountService.update(account);
             OperationType operationType = operationTypeService.getByName("expense");
             Operation operation = new Operation();

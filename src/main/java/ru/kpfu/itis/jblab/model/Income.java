@@ -1,6 +1,11 @@
 package ru.kpfu.itis.jblab.model;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * Created by Марат on 07.07.2017.
@@ -11,7 +16,8 @@ public class Income {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
+    @Cascade(value = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "income_source_id")
     private IncomeSource incomeSource;
     @OneToOne

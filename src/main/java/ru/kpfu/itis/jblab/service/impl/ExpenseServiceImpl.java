@@ -6,6 +6,8 @@ import ru.kpfu.itis.jblab.model.Expense;
 import ru.kpfu.itis.jblab.repository.ExpenseRepository;
 import ru.kpfu.itis.jblab.service.ExpenseService;
 
+import java.util.List;
+
 /**
  * Created by Марат on 10.07.2017.
  */
@@ -31,5 +33,15 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public void delete(Expense expense) {
         expenseRepository.delete(expense);
+    }
+
+    @Override
+    public List<Expense> getAllByExpenseTypeId(Long expenseTypeId) {
+        return expenseRepository.findAllByExpenseTypeId(expenseTypeId);
+    }
+
+    @Override
+    public Expense update(Expense expense) {
+        return expenseRepository.save(expense);
     }
 }
