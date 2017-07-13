@@ -1,11 +1,9 @@
 package ru.kpfu.itis.jblab.model;
 
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * Created by Марат on 07.07.2017.

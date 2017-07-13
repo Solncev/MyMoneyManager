@@ -52,6 +52,8 @@ public class MainController {
         model.addAttribute("accounts1", accounts);
         model.addAttribute("expenseTypes1", expenseTypes);
         model.addAttribute("accounts2", accounts);
+        model.addAttribute("accounts3", accounts);
+        model.addAttribute("accounts4", accounts);
         return "main";
     }
 }

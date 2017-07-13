@@ -22,10 +22,11 @@
 </div>
 </#if>
 
-<#if accounts?has_content>
+
 <div class="container">
     <h2>Кошельки</h2>
     <div class="list-group">
+    <#if accounts?has_content>
         <#list accounts as account>
             <a href="#" class="list-group-item">
                 <h4 class="list-group-item-heading">${account.name}</h4>
@@ -36,9 +37,10 @@
                 </form>
             </a>
         </#list>
+    </#if>
     </div>
 </div>
-</#if>
+
 
 <div class="container">
     <h2>Создать кошелёк</h2>
@@ -57,10 +59,11 @@
     </form>
 </div>
 
-<#if expenseTypes?has_content>
+
 <div class="container">
     <h2>Расходы</h2>
     <div class="list-group">
+    <#if expenseTypes?has_content>
         <#list expenseTypes as expenseType>
             <a href="#" class="list-group-item">
                 <h4 class="list-group-item-heading">${expenseType.name}</h4>
@@ -70,9 +73,10 @@
                 </form>
             </a>
         </#list>
+    </#if>
     </div>
 </div>
-</#if>
+
 
 <div class="container">
     <h2>Создать категорию</h2>
@@ -86,10 +90,11 @@
     </form>
 </div>
 
-<#if operationList?has_content>
+
 <div class="container">
     <h2>История</h2>
     <div class="list-group">
+    <#if operationList?has_content>
         <#list operationList as operation>
             <a href="#" class="list-group-item">
                 <h4 class="list-group-item-heading">из ${operation.account.name} в ${operation.date}</h4>
@@ -100,9 +105,10 @@
                 </form>
             </a>
         </#list>
+    </#if>
     </div>
 </div>
-</#if>
+
 
 <div class="container">
     <h2>Добавить расход</h2>
@@ -142,10 +148,11 @@
     </form>
 </div>
 
-<#if incomeSourceList?has_content>
+
 <div class="container">
     <h2>Источники дохода</h2>
     <div class="list-group">
+    <#if incomeSourceList?has_content>
         <#list incomeSourceList as incomeSource>
             <a href="#" class="list-group-item">
                 <h4 class="list-group-item-heading">${incomeSource.name}</h4>
@@ -155,9 +162,10 @@
                 </form>
             </a>
         </#list>
+    </#if>
     </div>
 </div>
-</#if>
+
 
 <div class="container">
     <h2>Создать источник дохода</h2>
@@ -206,6 +214,45 @@
         <div class="form-group">
             <label for="operation_comment">Комментарий:</label>
             <input type="text" class="form-control" id="income_comment" name="income_comment">
+        </div>
+        <button type="submit" class="btn btn-default">Добавить</button>
+    </form>
+</div>
+
+<div class="container">
+    <h2>Выполнить перевод</h2>
+    <form action="/transfer/create" method="post" class="form-inline">
+        <div class="form-group">
+            <label for="sel5">Откуда:</label>
+            <select class="form-control" id="sel5" name="sel5">
+                <option value="-1">выбрать</option>
+            <#if accounts3?has_content>
+                <#list accounts3 as account3>
+                    <option value="${account3.id}">${account3.name}</option>
+                </#list>
+            </#if>
+            </select>
+            <br>
+        </div>
+        <div class="form-group">
+            <label for="transfer_amount">Сумма:</label>
+            <input type="number" class="form-control" name="transfer_amount" id="transfer_amount" value="0">
+        </div>
+        <div class="form-group">
+            <label for="sel6">Куда:</label>
+            <select class="form-control" id="sel6" name="sel6">
+                <option value="-1">выбрать</option>
+            <#if accounts3?has_content>
+                <#list accounts4 as account4>
+                    <option value="${account4.id}">${account4.name}</option>
+                </#list>
+            </#if>
+            </select>
+            <br>
+        </div>
+        <div class="form-group">
+            <label for="transfer_comment">Комментарий:</label>
+            <input type="text" class="form-control" id="transfer_comment" name="transfer_comment">
         </div>
         <button type="submit" class="btn btn-default">Добавить</button>
     </form>
