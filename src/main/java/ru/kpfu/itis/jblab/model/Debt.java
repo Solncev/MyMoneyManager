@@ -11,11 +11,39 @@ public class Debt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
-    @JoinColumn(name = "operation_id")
-    private Operation operation;
     private String name;
     private Boolean isOwnerDebtor;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+    private Double amount;
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
     public String getName() {
         return name;
@@ -39,13 +67,5 @@ public class Debt {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Operation getOperation() {
-        return operation;
-    }
-
-    public void setOperation(Operation operation) {
-        this.operation = operation;
     }
 }

@@ -340,6 +340,75 @@
     </form>
 </div>
 
+<div class="container">
+    <h2>Долги</h2>
+    <div class="list-group">
+    <#if debtList?has_content>
+        <#list debtList as debt>
+            <a href="#" class="list-group-item">
+                <#if debt.ownerDebtor>Я должен
+                <#else>мне должен</#if>
+                <h4 class="list-group-item-heading">${debt.name}</h4>
+                <p class="list-group-item-text"> ${debt.amount} P</p>
+                <form action="/debt/${debt.id}/delete" method="post">
+                    <label for="sel11">Выберите кошелек:</label>
+                    <select class="form-control" id="sel11" name="sel11">
+                        <option value="-1">выбрать</option>
+                        <#if accounts7?has_content>
+                            <#list accounts7 as account7>
+                                <option value="${account7.id}">${account7.name}</option>
+                            </#list>
+                        </#if>
+                    </select>
+                    <input type="submit" id="submit-btn" value="Погасить">
+                    <br>
+                </form>
+            </a>
+        </#list>
+    </#if>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Создать долг</h2>
+    <form action="/debt/create" method="post" class="form-inline">
+        <div class="form-group">
+            <label for="sel9">Кто должен:</label>
+            <select class="form-control" id="sel9" name="sel9">
+                <option value="-1">выбрать</option>
+                <option value="1">я</option>
+                <option value="2">мне</option>
+            </select>
+            <br>
+        </div>
+
+        <div class="form-group">
+            <label for="debtor_name">Имя:</label>
+            <input type="text" class="form-control" id="debtor_name" name="debtor_name">
+        </div>
+
+        <div class="form-group">
+            <label for="debt_amount">Сумма:</label>
+            <input type="number" class="form-control" name="debt_amount"
+                   id="debt_amount" value="0">
+        </div>
+
+        <div class="form-group">
+            <label for="sel10">Выберите кошелек:</label>
+            <select class="form-control" id="sel10" name="sel10">
+                <option value="-1">выбрать</option>
+            <#if accounts6?has_content>
+                <#list accounts6 as account6>
+                    <option value="${account6.id}">${account6.name}</option>
+                </#list>
+            </#if>
+            </select>
+            <br>
+        </div>
+        <button type="submit" class="btn btn-default">Добавить</button>
+    </form>
+</div>
+
 
 </body>
 </html>

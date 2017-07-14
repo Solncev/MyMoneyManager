@@ -24,10 +24,11 @@ public class AccountController {
     private final TransferService transferService;
     private final IncomeService incomeService;
     private final IntentionFeeService intentionFeeService;
+    private final DebtService debtService;
 
     @Autowired
     public AccountController(AccountService accountService, OperationService operationService, UserService userService,
-                             ExpenseService expenseService, TransferService transferService, IncomeService incomeService, IntentionFeeService intentionFeeService) {
+                             ExpenseService expenseService, TransferService transferService, IncomeService incomeService, IntentionFeeService intentionFeeService, DebtService debtService) {
         this.accountService = accountService;
         this.operationService = operationService;
         this.userService = userService;
@@ -35,6 +36,7 @@ public class AccountController {
         this.transferService = transferService;
         this.incomeService = incomeService;
         this.intentionFeeService = intentionFeeService;
+        this.debtService = debtService;
     }
 
     @RequestMapping(value = "/account/create", method = RequestMethod.POST)
@@ -60,20 +62,22 @@ public class AccountController {
         Boolean flag = (accountHistory != null);
         List<Operation> operationList = operationService.getAllByAccountId(id);
         Account account = new Account();
-        Account deletedAccount = null;
-        if (operationList != null && operationList.size() > 0) {
-            deletedAccount = operationList.get(0).getAccount();
-        }
+        Account deletedAccount = accountService.getOne(id);
         if (deletedAccount != null) {
+            account.setName(deletedAccount.getName());
+            account.setPicture(deletedAccount.getPicture());
+            accountService.add(account);
+            List<Debt> debtList = debtService.getAllByAccountId(id);
+            for (Debt debt : debtList) {
+                debt.setAccount(account);
+                debtService.update(debt);
+            }
             if (flag) {
-                account.setName(deletedAccount.getName());
-                account.setPicture(deletedAccount.getPicture());
                 List<Transfer> transfers = transferService.getAllBySecondAccountId(deletedAccount.getId());
                 for (Transfer transfer : transfers) {
                     transfer.setSecondAccount(account);
                     transferService.update(transfer);
                 }
-                accountService.add(account);
                 for (Operation operation : operationList) {
                     operation.setAccount(account);
                     operationService.update(operation);
@@ -88,19 +92,23 @@ public class AccountController {
                     switch (operationName) {
                         case "expense":
                             Expense expense = expenseService.getByOperationId(operation.getId());
-                            expenseService.delete(expense);
+                            if (expense != null)
+                                expenseService.delete(expense);
                             break;
                         case "income":
                             Income income = incomeService.getByOperationId(operation.getId());
-                            incomeService.delete(income);
+                            if (income != null)
+                                incomeService.delete(income);
                             break;
                         case "transfer":
                             Transfer transfer = transferService.getByOperationId(operation.getId());
-                            transferService.delete(transfer);
+                            if (transfer != null)
+                                transferService.delete(transfer);
                             break;
                         case "intention":
                             IntentionFee intentionFee = intentionFeeService.getByOperationId(operation.getId());
-                            intentionFeeService.delete(intentionFee);
+                            if (intentionFee != null)
+                                intentionFeeService.delete(intentionFee);
                             break;
                     }
                     operationService.delete(operation);

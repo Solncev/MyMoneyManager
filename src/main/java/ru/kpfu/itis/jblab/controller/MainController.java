@@ -20,24 +20,27 @@ public class MainController {
     private final IncomeSourceService incomeSourceService;
     private final UserService userService;
     private final IntentionService intentionService;
+    private final DebtService debtService;
 
     @Autowired
-    public MainController(AccountService accountService, ExpenseTypeService expenseTypeService, OperationService operationService, IncomeSourceService incomeSourceService, UserService userService, IntentionService intentionService) {
+    public MainController(AccountService accountService, ExpenseTypeService expenseTypeService, OperationService operationService, IncomeSourceService incomeSourceService, UserService userService, IntentionService intentionService, DebtService debtService) {
         this.accountService = accountService;
         this.expenseTypeService = expenseTypeService;
         this.operationService = operationService;
         this.incomeSourceService = incomeSourceService;
         this.userService = userService;
         this.intentionService = intentionService;
+        this.debtService = debtService;
     }
 
     @RequestMapping(value = "/")
     public String getMainPage(Model model) {
         Long ownerId = 1L;
         List<Account> accounts = accountService.getAllByOwnerId(ownerId);
-        List<ExpenseType> expenseTypes = expenseTypeService.getAllByOwnerId(1L);
+        List<ExpenseType> expenseTypes = expenseTypeService.getAllByOwnerId(ownerId);
         List<Operation> operationList = operationService.getAllByOwnerId(ownerId);
         List<Intention> intentionList = intentionService.getAllByOwnerId(ownerId);
+        List<Debt> debtList = debtService.getAllByOwnerId(ownerId);
         Double commonBalance = 0.0;
         for (Account a : accounts) {
             commonBalance += a.getBalance();
@@ -53,10 +56,13 @@ public class MainController {
         model.addAttribute("accounts3", accounts);
         model.addAttribute("accounts4", accounts);
         model.addAttribute("accounts5", accounts);
+        model.addAttribute("accounts6", accounts);
+        model.addAttribute("accounts7", accounts);
         model.addAttribute("expenseTypes", expenseTypes);
         model.addAttribute("expenseTypes1", expenseTypes);
         model.addAttribute("intentionList", intentionList);
         model.addAttribute("intentionList2", intentionList);
+        model.addAttribute("debtList", debtList);
         return "main";
     }
 }
