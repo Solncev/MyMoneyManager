@@ -16,7 +16,6 @@ public class Intention {
     private User owner;
     private double plannedAmount;
     private double currentAmount;
-    private int priority;
     private String name;
     private String photo;
 
@@ -50,14 +49,6 @@ public class Intention {
 
     public void setCurrentAmount(double currentAmount) {
         this.currentAmount = currentAmount;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
     }
 
     public String getName() {

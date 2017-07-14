@@ -9,7 +9,8 @@ import java.util.List;
  * Created by Марат on 10.07.2017.
  */
 public interface OperationRepository extends JpaRepository<Operation, Long> {
-    List<Operation> findAllByOwnerId(Long ownerId);
+    List<Operation> findAllByOwnerIdOrderByDateDesc(Long ownerId);
 
-    List<Operation> findAllByAccountId(Long accountId);
+    List<Operation> findAllByAccountIdOrderByDateDesc(Long accountId);
 }
+

@@ -6,6 +6,8 @@ import ru.kpfu.itis.jblab.model.Transfer;
 import ru.kpfu.itis.jblab.repository.TransferRepository;
 import ru.kpfu.itis.jblab.service.TransferService;
 
+import java.util.List;
+
 /**
  * Created by Марат on 13.07.2017.
  */
@@ -31,5 +33,15 @@ public class TransferServiceImpl implements TransferService {
     @Override
     public void delete(Transfer transfer) {
         transferRepository.delete(transfer);
+    }
+
+    @Override
+    public List<Transfer> getAllBySecondAccountId(long id) {
+        return transferRepository.findAllBySecondAccountId(id);
+    }
+
+    @Override
+    public Transfer update(Transfer transfer) {
+        return transferRepository.save(transfer);
     }
 }

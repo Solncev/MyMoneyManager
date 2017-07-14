@@ -3,6 +3,7 @@ package ru.kpfu.itis.jblab.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kpfu.itis.jblab.model.*;
 import ru.kpfu.itis.jblab.service.*;
@@ -30,7 +31,7 @@ public class TransferController {
         this.operationTypeService = operationTypeService;
     }
 
-    @RequestMapping(value = "/transfer/create")
+    @RequestMapping(value = "/transfer/create", method = RequestMethod.POST)
     public String createTransfer(@RequestParam Map<String, String> allRequestParams) {
         Long userId = 1L;
         User user = userService.getOne(userId);

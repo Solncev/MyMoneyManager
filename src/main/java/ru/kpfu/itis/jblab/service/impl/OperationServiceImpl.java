@@ -42,12 +42,12 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public List<Operation> getAllByOwnerId(Long ownerId) {
-        return operationRepository.findAllByOwnerId(ownerId);
+        return operationRepository.findAllByOwnerIdOrderByDateDesc(ownerId);
     }
 
     @Override
     public List<Operation> getAllByAccountId(Long accountId) {
-        return operationRepository.findAllByAccountId(accountId);
+        return operationRepository.findAllByAccountIdOrderByDateDesc(accountId);
     }
 
     @Override

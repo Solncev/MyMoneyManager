@@ -6,14 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.kpfu.itis.jblab.model.Account;
-import ru.kpfu.itis.jblab.model.Expense;
-import ru.kpfu.itis.jblab.model.Operation;
-import ru.kpfu.itis.jblab.model.User;
-import ru.kpfu.itis.jblab.service.AccountService;
-import ru.kpfu.itis.jblab.service.ExpenseService;
-import ru.kpfu.itis.jblab.service.OperationService;
-import ru.kpfu.itis.jblab.service.UserService;
+import ru.kpfu.itis.jblab.model.*;
+import ru.kpfu.itis.jblab.service.*;
 
 import java.util.List;
 import java.util.Map;
@@ -27,13 +21,20 @@ public class AccountController {
     private final OperationService operationService;
     private final UserService userService;
     private final ExpenseService expenseService;
+    private final TransferService transferService;
+    private final IncomeService incomeService;
+    private final IntentionFeeService intentionFeeService;
 
     @Autowired
-    public AccountController(AccountService accountService, OperationService operationService, UserService userService, ExpenseService expenseService) {
+    public AccountController(AccountService accountService, OperationService operationService, UserService userService,
+                             ExpenseService expenseService, TransferService transferService, IncomeService incomeService, IntentionFeeService intentionFeeService) {
         this.accountService = accountService;
         this.operationService = operationService;
         this.userService = userService;
         this.expenseService = expenseService;
+        this.transferService = transferService;
+        this.incomeService = incomeService;
+        this.intentionFeeService = intentionFeeService;
     }
 
     @RequestMapping(value = "/account/create", method = RequestMethod.POST)
@@ -59,25 +60,55 @@ public class AccountController {
         Boolean flag = (accountHistory != null);
         List<Operation> operationList = operationService.getAllByAccountId(id);
         Account account = new Account();
-        if (flag) {
-            if (operationList != null) {
-                Account deletedAccount = operationList.get(0).getAccount();
+        Account deletedAccount = null;
+        if (operationList != null && operationList.size() > 0) {
+            deletedAccount = operationList.get(0).getAccount();
+        }
+        if (deletedAccount != null) {
+            if (flag) {
                 account.setName(deletedAccount.getName());
                 account.setPicture(deletedAccount.getPicture());
-            }
-            accountService.add(account);
-            for (Operation operation : operationList) {
-                operation.setAccount(account);
-                operationService.update(operation);
-            }
-        } else {
-            for (Operation operation : operationList) {
-                Expense expense = expenseService.getByOperationId(operation.getId());
-                expenseService.delete(expense);
-                operationService.delete(operation);
+                List<Transfer> transfers = transferService.getAllBySecondAccountId(deletedAccount.getId());
+                for (Transfer transfer : transfers) {
+                    transfer.setSecondAccount(account);
+                    transferService.update(transfer);
+                }
+                accountService.add(account);
+                for (Operation operation : operationList) {
+                    operation.setAccount(account);
+                    operationService.update(operation);
+                }
+            } else {
+                List<Transfer> transfers = transferService.getAllBySecondAccountId(deletedAccount.getId());
+                for (Transfer transfer : transfers) {
+                    transferService.delete(transfer);
+                }
+                for (Operation operation : operationList) {
+                    String operationName = operation.getOperationType().getName();
+                    switch (operationName) {
+                        case "expense":
+                            Expense expense = expenseService.getByOperationId(operation.getId());
+                            expenseService.delete(expense);
+                            break;
+                        case "income":
+                            Income income = incomeService.getByOperationId(operation.getId());
+                            incomeService.delete(income);
+                            break;
+                        case "transfer":
+                            Transfer transfer = transferService.getByOperationId(operation.getId());
+                            transferService.delete(transfer);
+                            break;
+                        case "intention":
+                            IntentionFee intentionFee = intentionFeeService.getByOperationId(operation.getId());
+                            intentionFeeService.delete(intentionFee);
+                            break;
+                    }
+                    operationService.delete(operation);
+                }
             }
         }
         accountService.delete(id);
         return "redirect:/";
     }
 }
+

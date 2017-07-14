@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.kpfu.itis.jblab.model.Account;
-import ru.kpfu.itis.jblab.model.ExpenseType;
-import ru.kpfu.itis.jblab.model.IncomeSource;
-import ru.kpfu.itis.jblab.model.Operation;
+import ru.kpfu.itis.jblab.model.*;
 import ru.kpfu.itis.jblab.service.*;
 
 import java.util.List;
@@ -22,14 +19,16 @@ public class MainController {
     private final OperationService operationService;
     private final IncomeSourceService incomeSourceService;
     private final UserService userService;
+    private final IntentionService intentionService;
 
     @Autowired
-    public MainController(AccountService accountService, ExpenseTypeService expenseTypeService, OperationService operationService, IncomeSourceService incomeSourceService, UserService userService) {
+    public MainController(AccountService accountService, ExpenseTypeService expenseTypeService, OperationService operationService, IncomeSourceService incomeSourceService, UserService userService, IntentionService intentionService) {
         this.accountService = accountService;
         this.expenseTypeService = expenseTypeService;
         this.operationService = operationService;
         this.incomeSourceService = incomeSourceService;
         this.userService = userService;
+        this.intentionService = intentionService;
     }
 
     @RequestMapping(value = "/")
@@ -38,6 +37,7 @@ public class MainController {
         List<Account> accounts = accountService.getAllByOwnerId(ownerId);
         List<ExpenseType> expenseTypes = expenseTypeService.getAllByOwnerId(1L);
         List<Operation> operationList = operationService.getAllByOwnerId(ownerId);
+        List<Intention> intentionList = intentionService.getAllByOwnerId(ownerId);
         Double commonBalance = 0.0;
         for (Account a : accounts) {
             commonBalance += a.getBalance();
@@ -48,12 +48,15 @@ public class MainController {
         model.addAttribute("commonBalance", commonBalance);
         model.addAttribute("operationList", operationList);
         model.addAttribute("accounts", accounts);
-        model.addAttribute("expenseTypes", expenseTypes);
         model.addAttribute("accounts1", accounts);
-        model.addAttribute("expenseTypes1", expenseTypes);
         model.addAttribute("accounts2", accounts);
         model.addAttribute("accounts3", accounts);
         model.addAttribute("accounts4", accounts);
+        model.addAttribute("accounts5", accounts);
+        model.addAttribute("expenseTypes", expenseTypes);
+        model.addAttribute("expenseTypes1", expenseTypes);
+        model.addAttribute("intentionList", intentionList);
+        model.addAttribute("intentionList2", intentionList);
         return "main";
     }
 }

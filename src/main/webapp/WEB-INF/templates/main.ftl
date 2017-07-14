@@ -100,7 +100,7 @@
                 <h4 class="list-group-item-heading">из ${operation.account.name} в ${operation.date}</h4>
                 <p class="list-group-item-text">-${operation.amount} P</p>
                 <p class="list-group-item-text">${operation.comment}</p>
-                <form action="/operation/${operation.id}/delete">
+                <form action="/operation/${operation.id}/delete" method="post">
                     <input type="submit" id="submit-btn" value="Удалить">
                 </form>
             </a>
@@ -257,6 +257,89 @@
         <button type="submit" class="btn btn-default">Добавить</button>
     </form>
 </div>
+
+<div class="container">
+    <h2>Цели</h2>
+    <div class="list-group">
+    <#if intentionList?has_content>
+        <#list intentionList as intention>
+            <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">${intention.name}</h4>
+                <img class="profile-photo" src="${intention.photo}">
+                <p class="list-group-item-text">небоходимо: ${intention.plannedAmount} P</p>
+                <p class="list-group-item-text">накоплено: ${intention.currentAmount} P</p>
+                <form action="/intention/${intention.id}/delete" method="post">
+                    <input type="submit" id="submit-btn" value="Удалить">
+                </form>
+            </a>
+        </#list>
+    </#if>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Создать цель</h2>
+    <form action="/intention/create" method="post" class="form-inline" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="intention_name">Название:</label>
+            <input type="text" class="form-control" id="intention_name" placeholder="Введите название"
+                   name="intention_name">
+        </div>
+        <div class="form-group">
+            <label for="intention_planned_amount">Необходимая сумма:</label>
+            <input type="number" class="form-control" name="intention_planned_amount"
+                   id="intention_planned_amount" value="0">
+        </div>
+        <div class="form-group">
+            <label for="intention_current_amount">Собранная сумма:</label>
+            <input type="number" class="form-control" name="intention_current_amount"
+                   id="intention_current_amount" value="0">
+        </div>
+        <input type="file" name="file" id="file-btn">
+        <button type="submit" class="btn btn-default">Добавить</button>
+    </form>
+</div>
+
+<div class="container">
+    <h2>Перевести средства на цель</h2>
+    <form action="/intention_fee/create" method="post" class="form-inline">
+        <div class="form-group">
+            <label for="sel7">Откуда:</label>
+            <select class="form-control" id="sel7" name="sel7">
+                <option value="-1">выбрать</option>
+            <#if accounts5?has_content>
+                <#list accounts5 as account5>
+                    <option value="${account5.id}">${account5.name}</option>
+                </#list>
+            </#if>
+            </select>
+            <br>
+        </div>
+        <div class="form-group">
+            <label for="sel8">Выберите цель:</label>
+            <select class="form-control" id="sel8" name="sel8">
+                <option value="-1">выбрать</option>
+            <#if intentionList2?has_content>
+                <#list intentionList2 as intention2>
+                    <option value="${intention2.id}">${intention2.name}</option>
+                </#list>
+            </#if>
+            </select>
+            <br>
+        </div>
+        <div class="form-group">
+            <label for="intention_fee_amount">Сумма:</label>
+            <input type="number" class="form-control" name="intention_fee_amount"
+                   id="intention_fee_amount" value="0">
+        </div>
+        <div class="form-group">
+            <label for="intention_fee_comment">Комментарий:</label>
+            <input type="text" class="form-control" id="intention_fee_comment" name="intention_fee_comment">
+        </div>
+        <button type="submit" class="btn btn-default">Добавить</button>
+    </form>
+</div>
+
 
 </body>
 </html>
