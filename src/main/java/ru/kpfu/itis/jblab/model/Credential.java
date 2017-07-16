@@ -14,6 +14,7 @@ public class Credential {
     @OneToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+    @Column(unique = true)
     private String login;
     private String password;
 
