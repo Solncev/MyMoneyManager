@@ -3,9 +3,11 @@ package ru.kpfu.itis.jblab.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.jblab.model.Operation;
+import ru.kpfu.itis.jblab.model.User;
 import ru.kpfu.itis.jblab.repository.OperationRepository;
 import ru.kpfu.itis.jblab.service.OperationService;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,5 +55,15 @@ public class OperationServiceImpl implements OperationService {
     @Override
     public Operation update(Operation operation) {
         return operationRepository.save(operation);
+    }
+
+    @Override
+    public List<Operation> getFirst10(Long ownerId) {
+        return operationRepository.findFirst10ByOwnerIdOrderByDateDesc(ownerId);
+    }
+
+    @Override
+    public List<Operation> getAllByDateAfterAndDateBeforeAndOwner(Date dateAfter, Date dateBefore, User owner) {
+        return operationRepository.findAllByDateAfterAndDateBeforeAndOwner(dateAfter, dateBefore, owner);
     }
 }

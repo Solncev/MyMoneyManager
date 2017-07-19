@@ -1,6 +1,7 @@
 package ru.kpfu.itis.jblab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,12 +34,10 @@ public class TransferController {
 
     @RequestMapping(value = "/transfer/create", method = RequestMethod.POST)
     public String createTransfer(@RequestParam Map<String, String> allRequestParams) {
-        Long userId = 1L;
-        User user = userService.getOne(userId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long firstAccountId = Long.valueOf(allRequestParams.get("sel5"));
         Long secondAccountId = Long.valueOf(allRequestParams.get("sel6"));
         OperationType operationType = operationTypeService.getByName("transfer");
-        String comment = allRequestParams.get("transfer_comment");
         Double amount = Double.valueOf(allRequestParams.get("transfer_amount"));
         if (firstAccountId != -1 && secondAccountId != -1) {
             Account firstAccount = accountService.getOne(firstAccountId);
@@ -55,7 +54,7 @@ public class TransferController {
             operation.setOperationType(operationType);
             operation.setDate(new Date(System.currentTimeMillis()));
             operation.setAmount(amount);
-            operation.setComment(comment);
+            operation.setComment(secondAccount.getName());
             operationService.add(operation);
             Transfer transfer = new Transfer();
             transfer.setOperation(operation);

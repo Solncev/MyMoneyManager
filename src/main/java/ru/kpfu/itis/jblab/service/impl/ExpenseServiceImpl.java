@@ -44,4 +44,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     public Expense update(Expense expense) {
         return expenseRepository.save(expense);
     }
+
+    @Override
+    public List<Expense> getTodayExpenses() {
+        return null;
+    }
 }

@@ -1,6 +1,7 @@
 package ru.kpfu.itis.jblab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,8 +41,7 @@ public class IntentionController {
     @RequestMapping(value = "/intention/create", method = RequestMethod.POST)
     public String createIntention(@RequestParam Map<String, String> allRequestParams,
                                   @RequestParam("file") MultipartFile file) {
-        Long userId = 1L;
-        User user = userService.getOne(userId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String intentionName = allRequestParams.get("intention_name");
         if (intentionName != null && !intentionName.isEmpty()) {
             Double plannedAmount = Double.valueOf(allRequestParams.get("intention_planned_amount"));
@@ -63,8 +63,7 @@ public class IntentionController {
 
     @RequestMapping(value = "/intention_fee/create")
     public String createIntentionFee(@RequestParam Map<String, String> allRequestParams) {
-        Long userId = 1L;
-        User user = userService.getOne(userId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long intentionId = Long.valueOf(allRequestParams.get("sel8"));
         Long accountId = Long.valueOf(allRequestParams.get("sel7"));
         Double amount = Double.valueOf(allRequestParams.get("intention_fee_amount"));

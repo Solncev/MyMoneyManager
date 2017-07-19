@@ -1,6 +1,7 @@
 package ru.kpfu.itis.jblab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +38,7 @@ public class IncomeController {
 
     @RequestMapping(value = "/income_source/create", method = RequestMethod.POST)
     public String createIncomeSource(@RequestParam Map<String, String> allRequestParams) {
-        Long userId = 1L;
-        User user = userService.getOne(userId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String name = allRequestParams.get("income_source_name");
         IncomeSource incomeSource = new IncomeSource();
         incomeSource.setOwner(user);
@@ -50,12 +50,10 @@ public class IncomeController {
 
     @RequestMapping(value = "/income/create", method = RequestMethod.POST)
     public String addIncome(@RequestParam Map<String, String> allRequestParams) {
-        Long userId = 1L;
-        User user = userService.getOne(userId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long incomeSourceId = Long.valueOf(allRequestParams.get("sel3"));
         Double amount = Double.valueOf(allRequestParams.get("income_amount"));
         Long accountId = Long.valueOf(allRequestParams.get("sel4"));
-        String comment = allRequestParams.get("income_comment");
         if (incomeSourceId != -1 && accountId != -1) {
             IncomeSource incomeSource = incomeSourceService.getOne(incomeSourceId);
             Account account = accountService.getOne(accountId);
@@ -71,7 +69,7 @@ public class IncomeController {
             operation.setDate(new Date(System.currentTimeMillis()));
             operation.setOperationType(operationType);
             operation.setAccount(account);
-            operation.setComment(comment);
+            operation.setComment(incomeSource.getName());
             operation.setOwner(user);
             operationService.add(operation);
             Income income = new Income();

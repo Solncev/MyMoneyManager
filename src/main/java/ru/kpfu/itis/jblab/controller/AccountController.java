@@ -1,6 +1,7 @@
 package ru.kpfu.itis.jblab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,10 +44,14 @@ public class AccountController {
     public String createAccount(@RequestParam Map<String, String> allRequestParams) {
         String name = allRequestParams.get("account_name");
         String balance = allRequestParams.get("account_balance");
-        User user = userService.getOne(1L);
-        if (!name.equals("")) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!name.isEmpty()) {
             Account account = new Account();
-            account.setBalance(Double.parseDouble(balance));
+            if (!balance.isEmpty()) {
+                account.setBalance(Double.parseDouble(balance));
+            } else {
+                account.setBalance(0);
+            }
             account.setName(name);
             account.setOwner(user);
             accountService.add(account);

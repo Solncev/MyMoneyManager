@@ -1,6 +1,7 @@
 package ru.kpfu.itis.jblab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,8 @@ public class DebtController {
     private final OperationTypeService operationTypeService;
 
     @Autowired
-    public DebtController(UserService userService, OperationService operationService, DebtService debtService, AccountService accountService, OperationTypeService operationTypeService) {
+    public DebtController(UserService userService, OperationService operationService, DebtService debtService,
+                          AccountService accountService, OperationTypeService operationTypeService) {
         this.userService = userService;
         this.operationService = operationService;
         this.debtService = debtService;
@@ -32,15 +34,13 @@ public class DebtController {
         this.operationTypeService = operationTypeService;
     }
 
-    @RequestMapping(value = "/debt/create", method = RequestMethod.POST)
-    public String createDebt(@RequestParam Map<String, String> allRequestParams) {
-        Long userId = 1L;
-        User user = userService.getOne(userId);
+    @RequestMapping(value = "/debt/create/{who}", method = RequestMethod.POST)
+    public String createDebt(@RequestParam Map<String, String> allRequestParams, @PathVariable("who") String who) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String name = allRequestParams.get("debtor_name");
-        int whoIsDebtor = Integer.parseInt(allRequestParams.get("sel9"));
         Double amount = Double.valueOf(allRequestParams.get("debt_amount"));
         Long accountId = Long.valueOf(allRequestParams.get("sel10"));
-        if (whoIsDebtor != -1 && accountId != -1) {
+        if (accountId != -1) {
             Operation operation = new Operation();
             OperationType operationType;
             Account account = accountService.getOne(accountId);
@@ -48,15 +48,15 @@ public class DebtController {
             Debt debt = new Debt();
             debt.setOwner(user);
             debt.setOwnerDebtor(false);
-            if (whoIsDebtor == 1) {
+            if (who.equals("i")) {
                 debt.setOwnerDebtor(true);
                 account.setBalance(accountBalance + amount);
                 operationType = operationTypeService.getByName("income");
-                operation.setComment("взял в долг у" + name);
+                operation.setComment("взял в долг у " + name);
             } else {
                 account.setBalance(accountBalance - amount);
                 operationType = operationTypeService.getByName("expense");
-                operation.setComment("дал в долг" + name);
+                operation.setComment("дал в долг " + name);
             }
             accountService.update(account);
             operation.setOwner(user);
@@ -75,8 +75,7 @@ public class DebtController {
 
     @RequestMapping(value = "/debt/{id}/delete", method = RequestMethod.POST)
     public String deleteDebt(@RequestParam Map<String, String> allRequestParam, @PathVariable("id") String debtId) {
-        Long userId = 1L;
-        User user = userService.getOne(userId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long id = Long.valueOf(debtId);
         Debt debt = debtService.getOne(id);
         Operation operation = new Operation();

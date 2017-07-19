@@ -17,4 +17,6 @@ public interface ExpenseService {
     List<Expense> getAllByExpenseTypeId(Long expenseTypeId);
 
     Expense update(Expense expense);
+
+    List<Expense> getTodayExpenses();
 }

@@ -1,7 +1,9 @@
 package ru.kpfu.itis.jblab.service;
 
 import ru.kpfu.itis.jblab.model.Operation;
+import ru.kpfu.itis.jblab.model.User;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,4 +23,8 @@ public interface OperationService {
     List<Operation> getAllByAccountId(Long accountId);
 
     Operation update(Operation operation);
+
+    List<Operation> getFirst10(Long ownerId);
+
+    List<Operation> getAllByDateAfterAndDateBeforeAndOwner(Date dateAfter, Date dateBefore, User owner);
 }

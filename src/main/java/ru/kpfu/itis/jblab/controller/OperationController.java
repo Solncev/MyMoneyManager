@@ -20,9 +20,10 @@ public class OperationController {
     private final TransferService transferService;
     private final IntentionFeeService intentionFeeService;
     private final IntentionService intentionService;
+    private final ExpenseTypeService expenseTypeService;
 
     @Autowired
-    public OperationController(OperationService operationService, ExpenseService expenseService, AccountService accountService, IncomeService incomeService, TransferService transferService, IntentionFeeService intentionFeeService, IntentionService intentionService) {
+    public OperationController(OperationService operationService, ExpenseService expenseService, AccountService accountService, IncomeService incomeService, TransferService transferService, IntentionFeeService intentionFeeService, IntentionService intentionService, ExpenseTypeService expenseTypeService) {
         this.operationService = operationService;
         this.expenseService = expenseService;
         this.accountService = accountService;
@@ -30,6 +31,7 @@ public class OperationController {
         this.transferService = transferService;
         this.intentionFeeService = intentionFeeService;
         this.intentionService = intentionService;
+        this.expenseTypeService = expenseTypeService;
     }
 
     @RequestMapping(value = "/operation/{id}/delete", method = RequestMethod.POST)
@@ -43,6 +45,9 @@ public class OperationController {
             case "expense":
                 Expense expense = expenseService.getByOperationId(operationId);
                 if (expense != null) {
+                    ExpenseType expenseType = expense.getExpenseType();
+                    expenseType.setSpent(expenseType.getSpent() - amount);
+                    expenseTypeService.update(expenseType);
                     account.setBalance(account.getBalance() + amount);
                     accountService.update(account);
                     expenseService.delete(expense);

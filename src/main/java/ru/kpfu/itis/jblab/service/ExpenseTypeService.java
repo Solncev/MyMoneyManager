@@ -15,4 +15,6 @@ public interface ExpenseTypeService {
     List<ExpenseType> getAllByOwnerId(Long ownerId);
 
     ExpenseType getOne(Long id);
+
+    ExpenseType update(ExpenseType expenseType);
 }

@@ -40,4 +40,9 @@ public class ExpenseTypeServiceImpl implements ExpenseTypeService {
     public ExpenseType getOne(Long id) {
         return expenseTypeRepository.findOne(id);
     }
+
+    @Override
+    public ExpenseType update(ExpenseType expenseType) {
+        return expenseTypeRepository.save(expenseType);
+    }
 }

@@ -16,6 +16,15 @@ public class ExpenseType {
     private User owner;
     private String name;
     private String picture;
+    private double spent;
+
+    public double getSpent() {
+        return spent;
+    }
+
+    public void setSpent(double spent) {
+        this.spent = spent;
+    }
 
     public String getPicture() {
         return picture;
